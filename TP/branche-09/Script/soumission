@@ -1,0 +1,133 @@
+#!/bin/bash
+#
+# Script pour aider a la correction des programmes
+# soummis par Git en INF1900 pour les travaux pratiques
+#
+# Pour executer ce script, le sauvegarder dans une
+# repertoire (par exemple /users/collin/script) et donner
+# lui un nom (comme soumission).  Il faut egalement lui
+# conferer des droits d'execution:
+#
+# % cd /users/collin/script  (exemple)
+# % chmod u+x soumission_git  (place l'usager avec permission d'exécution)
+#
+# Usage:  % ./soumission_git no_d_equipe
+#
+#            no_d_equipe: est votre numero d'equipe de 2 chiffres 
+#
+#    exemple:  ./soumission_git 05
+#
+# Jerome Collin
+# Septembre 2006
+# Modifications: aout 2008, janvier 2009
+# 
+# Simon Barrette
+# Adaptation pour Git: juillet 2016
+# correction: enlever les \r en fin de ligne - JC janvier 2017
+# passage à INF1900  août 2018
+
+#
+# Variables importantes
+#
+declare -r  gitroot="https://githost.gi.polymtl.ca/git"
+declare -r  equipePrefixe="inf1900-"
+declare     equipe=1000
+declare -r  subdir="tp"
+declare -r  tp="tp6"
+declare -ar problemes=( pb1 pb2 )
+declare     tmpDir="/tmp/${subdir}-testGit"
+
+#
+# Fonctions permettant de sortir du script en cas d'erreurs.
+# Aucun parametre.  Assume la declaration de la variable "tmpDir"
+# La fonction met fin a l'execution du script et ne retourne rien
+#
+function _sortie
+{
+   popd &> /dev/null
+   rm -rf ${tmpDir}
+   exit 1
+}
+
+#
+# Traitement de l'argument sur la ligne de commande
+#
+
+# verifier qu'il n'y a qu'un seul argument
+if [ $# -ne 1 ]; then
+   echo "ERREUR: ce script doit etre invoque avec exactement un argument"
+   exit 1
+fi
+
+# verifier qu'il y a bien uniquement 2 
+if [ ${#1} -ne 2 ]; then
+   echo "ERREUR: le numero d'equipe doit etre deux chiffres (comme 05 par exemple)"
+   exit 1
+fi
+
+# verifier que le numero d'equipe est entre 00 et 99
+if [ -z "$(echo $1 | grep '[0-9][0-9]')" ]; then
+   echo "ERREUR: erreur de format dans le numero d'equipe"
+   exit 1
+fi
+
+equipe=$1
+echo "INFORMATION: Dossier d'equipe: ${equipePrefixe}${equipe}"
+
+# creer un repertoire temporaire et prendre une copie
+# de l'entrepot
+
+cheminTp="${gitroot}/${equipePrefixe}${equipe}"
+
+if ! mkdir -p $tmpDir
+then
+   echo "ERREUR: incapable de creer le repertoire temporaire"
+   exit 1
+fi
+
+if ! pushd ${tmpDir} &> /dev/null
+then
+   echo "ERREUR: incapable d'acceder le repertoire temporaire"
+   exit 1
+fi
+
+if git clone ${cheminTp} &> $tmpDir/git.log
+then
+   echo "INFORMATION: copie du code prise dans l'entrepot Git correctement"
+else
+   echo "ERREUR: incapable de prendre une copie de l'entrepot Git"
+   _sortie
+fi
+
+popd &> /dev/null
+
+# itere sur les problemes
+for pb in "${problemes[@]}"; do
+
+   pbDir=${tmpDir}/${equipePrefixe}${equipe}/${subdir}/${tp}/${pb}
+   
+   if ! pushd ${pbDir} &> /dev/null
+   then
+      echo "ERREUR: le sous-repertoire a un mauvais nom ou est inexistant"
+      _sortie
+   fi
+
+   # compilation du code
+   if make &> make.log
+   then
+      echo "INFORMATION: compilation du code reussie pour le probleme ${pb}"
+   else
+      echo "ERREUR: incapable de compiler le code pour le probleme ${pb}"
+      _sortie
+   fi
+
+   popd &> /dev/null
+done
+
+#
+# S'il n'y a pas eu de probleme, finir en l'indiquant
+#
+rm -rf ${tmpDir}
+echo "INFORMATION: sommission SVN correcte pour l'equipe ${equipePrefixe}${equipe}."
+exit 0
+

@@ -1,0 +1,8 @@
+*.a
+*.o
+*.hex
+*.out
+*.map
+*.d
+.DS_Store
+.vscode
