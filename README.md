@@ -80,5 +80,7 @@ Plusieurs fonctions orpheline se retrouve dans FInalFonctions, par exemple:
 Merci beaucoup, et nous esperons avoir pu rendre votre correction plus facile!
 
 Equipe 08-09
+
 AtmegaReussi
+
 5 decembre 2018
