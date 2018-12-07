@@ -1,5 +1,5 @@
 # Project Title
-Fichier d'aide a la correction
+PROJET INITIAL DE SYSTÈME EMBARQUÉ
 
 ## Authors:
 Simon Berhanu
@@ -8,8 +8,6 @@ Vincent L'Ecuyer-Simard
 Xi Chen Shen
 
 ## Getting Started
-Bonjour cher correcteur,
-
 Nous avons separer, comme vous pouvez le voir, notre dossier projet en 2 sections, Exec et lib_Final.
 Comme leur nom le suppose, Exec contient notre executable et lib_Final notre librairie.
 
