@@ -77,7 +77,10 @@ Plusieurs fonctions orpheline se retrouve dans FInalFonctions, par exemple:
   - Smoothing tunnel qui rend droit les parois des tunels qui comportent de petites deviations
 
 
+
 Merci beaucoup, et nous esperons avoir pu rendre votre correction plus facile!
+
+
 
 Equipe 08-09
 
