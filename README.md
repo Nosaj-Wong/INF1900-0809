@@ -1,10 +1,10 @@
 # Project Title
-PROJET INITIAL DE SYSTÈME EMBARQUÉ
+Projet initial de système embarqué du cours INF1900 
 
 ## Authors:
-Simon Berhanu
-Facundo Giannotti
-Vincent L'Ecuyer-Simard
+Simon Berhanu,
+Facundo Giannotti,
+Vincent L'Ecuyer-Simard,
 Xi Chen Shen
 
 ## Getting Started
